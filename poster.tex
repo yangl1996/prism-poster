@@ -12,6 +12,7 @@
 \usepackage[size=custom,width=120,height=72,scale=1.0]{beamerposter}
 \usetheme{gemini}
 \usecolortheme{gemini}
+\usepackage{subcaption}
 \usepackage{tikz}
 \usepackage{gnuplot-lua-tikz}
 \usepackage{graphicx}
@@ -60,14 +61,15 @@
     
     \begin{figure}
       \centering
-      \input{longest-chain.tex}
-      \caption{A figure caption.}
+      \subcaptionbox{Longest Chain}{\input{longest-chain.tex}}
+      \subcaptionbox{Prism}{\input{prism-chains.tex}}
+      \caption{The longest chain protocol and the Prism protocol.}
     \end{figure}
 
     \begin{figure}
       \centering
       \input{compare-fig.tex}
-      \caption{A figure caption.}
+      \caption{Performance of Prism, Algorand, and the longest chain protocol. Curves represent tradeoff.}
     \end{figure}
     
 
