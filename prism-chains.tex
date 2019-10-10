@@ -1,23 +1,56 @@
-\tikzstyle{block} = [draw, fill=blue!20, rectangle, rounded corners, minimum height=1.5em, minimum width=2.427em, text centered, very thick]
-\tikzstyle{fork} = [draw, dashed, fill=blue!20, rectangle, rounded corners, minimum height=1.5em, minimum width=2.427em, text centered, very thick]
+\tikzstyle{proposer} = [draw, fill=blue!20, rectangle, rounded corners, minimum height=1.5em, minimum width=2.427em, text centered, very thick]
+\tikzstyle{voter} = [draw, fill=red!20, rectangle, rounded corners, minimum height=1.5em, minimum width=2.427em, text centered, very thick]
+\tikzstyle{transaction} = [draw, fill=green!20, circle, rounded corners, minimum height=0.75em, minimum width=0.75em, text centered, very thick]
+\tikzstyle{pfork} = [draw, dashed, fill=blue!20, rectangle, rounded corners, minimum height=1.5em, minimum width=2.427em, text centered, very thick]
+\tikzstyle{vfork} = [draw, dashed, fill=red!20, rectangle, rounded corners, minimum height=1.5em, minimum width=2.427em, text centered, very thick]
+\tikzstyle{placeholder} = [draw=none, minimum height=1.5em, minimum width=2.427em]
 
 \begin{tikzpicture}[auto, node distance=3em,>=latex']
-\node [block,label=left:genesis] (b0) {};
-\node [block, below of=b0] (b1) {};
-\node [block, below of=b1] (b2) {};
-\node [fork, right of=b2] (f2) {};
-\node [block, below of=b2] (b3) {};
-\node [fork, right of=b3] (f3) {};
-\node [block, below of=b3, label=right:longest chain] (b4) {};
+\node [proposer] (p0) {};
+\node [placeholder, right of=p0] (ph4) {};
+\node [proposer, below of=p0] (p1) {};
+\node [proposer, below of=p1] (p2) {};
+\node [proposer, below of=p2] (p3) {};
+\node [pfork, right of=p2, label=below:fork] (pf2) {};
+\begin{scope}[node distance=1.2cm]
+    \node[transaction, left of=p2, xshift=-2.5cm] (t1) {};
+    \node[transaction, left of=t1] (t2) {};
+    \node[transaction, below of=t1] (t3){};
+    \node[transaction, below of=t2] (t4){};
+    \node[transaction, above of=t1] (t5){};
+    \node[transaction, above of=t2] (t6){};
+\end{scope}
+\node [voter, right of=ph4] (vl0) {};
+\node [voter, below of=vl0] (vl1) {};
+\node [voter, below of=vl1] (vl2) {};
+\node [voter, below of=vl2] (vl3) {};
+\node [placeholder, right of=vl0] (ph3) {};
+\node [right of=vl1] {$\cdots$};
+\node [voter, right of=ph3] (vr0) {};
+\node [voter, below of=vr0] (vr1) {};
+\node [voter, below of=vr1] (vr2) {};
+\node [voter, below of=vr2] (vr3) {};
+\node [vfork, right of=vr2, label=below:fork] (vf2) {};
+\draw[very thick, dashed] (vl1) to (vl0);
+\draw[very thick, ->] (vl2) to (vl1);
+\draw[very thick, ->] (vl3) to (vl2);
+\draw[very thick, dashed] (vr1) to (vr0);
+\draw[very thick, ->] (vr2) to (vr1);
+\draw[very thick, ->] (vr3) to (vr2);
+\draw[very thick, ->] (vf2) to (vr1);
+\draw[very thick, <-] (p2)  to [looseness=0.4] (vl2);
+\draw[very thick, <-] (p2)  to [looseness=0.4] (vr2);
+\draw[densely dashed, very thick, <-] (pf2)  to [looseness=0.4] (vf2);
 
+\draw[very thick, <-] (t1)  to [looseness=0.5] (p2.west);
+\draw[very thick, <-] (t2)  to [looseness=0.5] (p2.west);
+\draw[very thick, <-] (t3)  to [looseness=0.3] (p2.south west);
+\draw[very thick, <-] (t4)  to [looseness=0.3] (p2.south west);
+\draw[very thick, <-] (t5)  to [looseness=0.8] (p2.north west);
+\draw[very thick, <-] (t6)  to [looseness=0.8] (p2.north west);
 
-\draw[very thick, dashed] (b1) to (b0);
-\draw[very thick, ->] (b2) to (b1);
-\draw[very thick, ->] (b3) to (b2);
-\draw[very thick, ->] (b4) to (b3);
-\draw[very thick, ->] (f2) to (b1);
-\draw[very thick, ->] (f3) to (f2);
+\draw[decorate,decoration={brace,amplitude=15pt,mirror,raise=10pt},very thick] (vl3.south west) -- (vr3.south east) node [black,midway,yshift=-2cm] {voter};
+\draw[decorate,decoration={brace,amplitude=15pt,mirror,raise=10pt},very thick] (p3.south west) -- (p3.south east) node [black,midway,yshift=-2cm] {proposer};
+\draw[decorate,decoration={brace,amplitude=15pt,mirror,raise=15pt},very thick] (t4.south west) -- (t3.south east) node [black,midway,yshift=-2cm] {transaction};
 
-\draw[decorate,decoration={brace,mirror,amplitude=15pt,raise=10pt},very thick] (b2.north west) -- (b4.south west) node [black,midway,xshift=-4.2cm] {$k$-deep};
-\draw[decorate,decoration={brace,amplitude=15pt,raise=10pt},very thick] (f2.north east) -- (f3.south east) node [black,midway,xshift=1cm] {fork};
 \end{tikzpicture}
