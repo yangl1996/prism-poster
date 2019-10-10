@@ -10,3 +10,5 @@
 *.out
 *.snm
 *.toc
+.texpadtmp
+*.gz

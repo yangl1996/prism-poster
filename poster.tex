@@ -12,6 +12,8 @@
 \usepackage[size=custom,width=120,height=72,scale=1.0]{beamerposter}
 \usetheme{gemini}
 \usecolortheme{gemini}
+\usepackage{tikz}
+\usepackage{gnuplot-lua-tikz}
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{tikz}
@@ -34,11 +36,11 @@
 % Title
 % ====================
 
-\title{Some fancy title: followed by some more text}
+\title{Prism: Scaling Bitcoin by 10,000$\boldsymbol{\times}$}
 
-\author{Alyssa P. Hacker \inst{1} \and Ben Bitdiddle \inst{2} \and Lem E. Tweakit \inst{2}}
+\author{Lei Yang \inst{1} \and Vivek Bagaria \inst{2} \and Gerui Wang \inst{3} \and Mohammad Alizadeh \inst{1} \and David Tse \inst{2} \and Giulia Fanti \inst{4} \and Pramod Viswanath \inst{3}}
 
-\institute[shortinst]{\inst{1} Some Institute \samelineand \inst{2} Another Institute}
+\institute[shortinst]{\inst{1} MIT CSAIL \samelineand \inst{2} Stanford University \samelineand \inst{3} University of Illinois at Urbana-Champaign \samelineand \inst{4} Carnegie Mellon University}
 
 % ====================
 % Body
@@ -52,19 +54,22 @@
 
 \begin{column}{\colwidth}
 
-  \begin{block}{A block title}
+  \begin{block}{The longest chain protocol}
 
     Some block contents, followed by a diagram, followed by a dummy paragraph.
+    
+    \begin{figure}
+      \centering
+      \input{longest-chain.tex}
+      \caption{A figure caption.}
+    \end{figure}
 
     \begin{figure}
       \centering
-      \begin{tikzpicture}[scale=6]
-        \draw[step=0.25cm,color=gray] (-1,-1) grid (1,1);
-        \draw (1,0) -- (0.2,0.2) -- (0,1) -- (-0.2,0.2) -- (-1,0)
-          -- (-0.2,-0.2) -- (0,-1) -- (0.2,-0.2) -- cycle;
-      \end{tikzpicture}
+      \input{compare-fig.tex}
       \caption{A figure caption.}
     \end{figure}
+    
 
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ultricies
     eget libero ac ullamcorper. Integer et euismod ante. Aenean vestibulum

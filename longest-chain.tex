@@ -1,0 +1,23 @@
+\tikzstyle{block} = [draw, fill=blue!20, rectangle, rounded corners, minimum height=2em, minimum width=3.24em, text centered, very thick]
+\tikzstyle{fork} = [draw, dashed, fill=blue!20, rectangle, rounded corners, minimum height=2em, minimum width=3.24em, text centered, very thick]
+
+\begin{tikzpicture}[auto, node distance=4em,>=latex']
+\node [block,label=left:genesis] (b0) {};
+\node [block, below of=b0] (b1) {};
+\node [block, below of=b1] (b2) {};
+\node [fork, right of=b2] (f2) {};
+\node [block, below of=b2] (b3) {};
+\node [fork, right of=b3] (f3) {};
+\node [block, below of=b3, label=right:longest chain] (b4) {};
+
+
+\draw[very thick, dashed] (b1) to (b0);
+\draw[very thick, ->] (b2) to (b1);
+\draw[very thick, ->] (b3) to (b2);
+\draw[very thick, ->] (b4) to (b3);
+\draw[very thick, ->] (f2) to (b1);
+\draw[very thick, ->] (f3) to (f2);
+
+\draw[decorate,decoration={brace,mirror,amplitude=15pt,raise=10pt},very thick] (b2.north west) -- (b4.south west) node [black,midway,xshift=-4.2cm] {$k$-deep};
+\draw[decorate,decoration={brace,amplitude=15pt,raise=10pt},very thick] (f2.north east) -- (f3.south east) node [black,midway,xshift=1cm] {fork};
+\end{tikzpicture}
