@@ -1,5 +1,6 @@
 # output
 *.pdf
+*synctex*
 
 # intermediate files
 *.aux
