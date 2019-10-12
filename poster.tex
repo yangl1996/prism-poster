@@ -19,6 +19,8 @@
 \usepackage{booktabs}
 \usepackage{tikz}
 \usepackage{pgfplots}
+\usepackage{amsmath}
+\usepackage{multicol}
 
 % ====================
 % Lengths
@@ -108,7 +110,37 @@
   
   \begin{alertblock}{The Prism protocol}
 
-  \heading{Deconstruct the longest chain protocol}
+  \textbf{Observation}: blocks in the longest chain protocol serve three roles: standing for election to be leaders; adding transactions to the ledger; voting for ancestor blocks.
+  
+  \textbf{Solution}: factorizing the blocks according to those roles (Fig.~\ref{fig:prism-chains})
+  
+  \begin{enumerate}
+      \item \textbf{Proposer blocktree} refers to \textit{transaction blocks}. One \textit{leader} is elected from each level. The sequence of the leaders decides the final order of the ledger.
+      \item \textbf{Voter blockchains} each votes for one proposer block for every proposer level. Only votes on the respective longest chains are counted.  
+      \item \textbf{Transaction blocks} contain transaction data. They do not form any specific topology.
+  \end{enumerate}
+    
+  \begin{multicols}{2}
+
+  \begin{align*}
+   \text{\textbf{Latency}} &\leq D c_1(\beta) + \frac{D c_2(\beta)}{m}\log \frac{1}{\epsilon} \\
+   \text{\textbf{Throughput}} &= (1-\beta) C
+  \end{align*}
+  \break 
+  \begin{align*}
+      D &= \text{network propagation delay} \\
+      C &= \text{network bandwidth} \\
+      m &= \text{number of voter chains} \\
+      \epsilon &= \text{probability of double-spending attack} \\
+      \beta &= \text{tolerable adversarial fraction} \\
+      c_1\text{, }c_2 &= \beta\text{-dependent constants.} 
+  \end{align*}
+  
+  \end{multicols}
+
+  
+    
+
   
   
 

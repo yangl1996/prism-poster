@@ -12,6 +12,8 @@ set format y "$%g\\%%$"
 set format x "$10\^{%T}$"
 set key left bottom nobox
 lc(x) = 100 / (5 * x + 2)
-p(x) = 50
+p2(x) = 100 - x * 100
+p1(x) = 50
+p(x) = (p2(x) < 50) ? p2(x) : 50
 plot lc(x) with lines lc 2 lw 3.5 title "LC", \
-     p(x) with lines lc 7 lw 3.5 title "Prism"
+     p1(x) with lines lc 7 lw 3.5 title "Prism"
