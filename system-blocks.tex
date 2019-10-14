@@ -1,0 +1,32 @@
+\tikzstyle{ledger} = [draw, very thick, fill=blue!20, rectangle, 
+    minimum height=4em, minimum width=6em, text centered, text width=5em]
+\tikzstyle{blockchain} = [draw, very thick, fill=red!20, rectangle, minimum height=4em, minimum width=6em, text centered, text width=5em]
+\tikzstyle{miner} = [draw, very thick, fill=green!20, rectangle, minimum height=4em, minimum width=6em, text centered, text width=5em]
+
+\tikzstyle{database} = [draw, very thick, fill=yellow!20, rectangle, rounded corners, text width=5em, minimum height=3em, minimum width=6em, text centered]
+
+% The block diagram code is probably more verbose than necessary
+\begin{tikzpicture}[auto, node distance=1.8em and 3.3em,>=latex']
+    \node [database] (blockchaindb) {Block Structure Database};
+    \node [blockchain, above=of blockchaindb] (blockchain) {Block Structure Manager};
+    \node [ledger, left=of blockchaindb] (ledger) {Ledger Manager};
+    \node [miner, right=of blockchaindb] (miner) {Miner};
+    \node [database, left=of ledger] (utxodb) {UTXO Database};
+    \node [database, right=of blockchain] (mempool) {Memory Pool};
+    \node [database, left=of blockchain] (blockdb) {Block Database};
+    \node [above=of blockchain] (peers) {Peers};
+    \node [above=of mempool] (newtx) {New Transactions};
+    \draw [<->, very thick] (blockchaindb) -- node[name=a] {} (blockchain);
+    \draw [->, very thick] (blockchaindb) -- node[name=b] {} (miner);
+    \draw [<->, very thick] (blockchaindb) -- node[name=c] {} (ledger);
+    \draw [<-, very thick] (blockchain) -- node[name=d] {} (miner);
+    \draw [<->, very thick] (miner) -- node[name=e]{} (mempool);
+    \draw [->, very thick] (blockchain) -- node[name=f]{} (mempool);
+    \draw [<->, very thick] (blockchain) -- node[name=g]{} (blockdb);
+    \draw [<->, very thick] (ledger) -- node[name=h]{} (utxodb);
+    \draw [<-, very thick] (ledger) -- node[name=i]{} (blockdb);
+    \draw [<->, very thick] (peers) -- node[name=j]{} (blockchain);
+    \draw [->, very thick] (newtx) -- node[name=k]{} (mempool);
+
+
+\end{tikzpicture}

@@ -18,9 +18,11 @@
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{tikz}
+\usetikzlibrary{positioning}
 \usepackage{pgfplots}
 \usepackage{amsmath}
 \usepackage{multicol}
+\usepackage{multirow}
 
 % ====================
 % Lengths
@@ -68,7 +70,7 @@
       
   \heading{The Nakamoto longest chain protocol (Fig.~\ref{fig:longest-chain})}
   
-  First proposed in the Bitcoin paper~\cite{nakamoto2008bitcoin} by Nakamoto.
+  First proposed in the Bitcoin paper by Nakamoto.
   \begin{itemize}
     \item Blocks \textit{``mined''} by solving an inequality and \textit{``chained''} together by including a hash to the parent
     \item New blocks always append to the tip of the longest chain
@@ -119,9 +121,8 @@
       \item \textbf{Voter blockchains} each votes for one proposer block for every proposer level. Only votes on the respective longest chains are counted.  
       \item \textbf{Transaction blocks} contain transaction data. They do not form any specific topology.
   \end{enumerate}
-    
+  
   \begin{multicols}{2}
-
   \begin{align*}
    \text{\textbf{Latency}} &\leq D c_1(\beta) + \frac{D c_2(\beta)}{m}\log \frac{1}{\epsilon} \\
    \text{\textbf{Throughput}} &= (1-\beta) C
@@ -135,38 +136,83 @@
       \beta &= \text{tolerable adversarial fraction} \\
       c_1\text{, }c_2 &= \beta\text{-dependent constants.} 
   \end{align*}
-  
   \end{multicols}
-
-  
-    
-
-  
-  
-
   \end{alertblock}
+  
+  \begin{block}{Achieving high performance in the real world}
+  
+  \begin{figure}
+      \centering
+      \input{system-blocks.tex}
+      \caption{System design of the Prism client.}
+        \end{figure}
 
+      We implement the Prism consensus protocol and a UTXO-based cryptocurrency with pay-to-public-key transaction in 10,000 lines of Rust. Key design choices to enable high performance:
+      
+      \begin{itemize}
+          \item \textbf{Asynchronous ledger updates}: Do not update the ledger every time a new block comes, so handling incoming blocks become parallelizable and we can handle hundreds to thousands of blocks per second as required by Prism.
+          \item \textbf{Parallel transaction execution}: Execute transactions in parallel. We overcome data conflicts by borrowing \textit{pessimistic concurrency control} from database research. 	 
+          \item \textbf{Functional-style design pattern}: Design each module such that the output only depends on the inputs. This eliminates cross-module shared states and results in a system that has no global lock.
+          \item \textbf{No transaction broadcasting}: Prism mine blocks at very high rate. Each individual miner is very likely to mine a block in time comparable to delay associated with broadcasting a transaction (seconds).
+      \end{itemize}
+  \end{block}
+    
+  \textbf{Testbed}: 100 Amazon Web Service EC2 \texttt{c5d.4xlarge} instances. 16 CPU cores, 16 GB RAM, 400 GB NVMe SSD, 10 Gbps network. Instances connected into random 4-regular graph. 240 ms artificial RTT on each link. 400 Mbps bandwidth cap at each node.  
+  
 \end{column}
 
 \separatorcolumn
 
 \begin{column}{\colwidth}
 
-\begin{block}{Performance results}
-  
+\begin{block}{Evaluation}
+  \heading{Performance}
     \begin{figure}
       \centering
       \input{compare-fig.tex}
-      \caption{Performance of Prism, Algorand~\cite{algorand}, and the longest chain protocol. Curves represent tradeoff.}
+      \caption{Performance of Prism, Algorand, and the longest chain protocol. Curves represent tradeoff. For Prism, $\epsilon \approx 10^{-9}$. For the longest chain protocol, $\epsilon \approx 10^{-5}$. For Algorand, the attack probability $\approx 10^{-9}$.}
     \end{figure}
-  \end{block}
+  
+  \heading{Scalability}
+\begin{table}[]
+	\centering
+	\begin{tabular}{ c | r | c c c }
+	\toprule
+    \textbf{Property} & \textbf{\#Nodes} & 100 & 300 & 1000 \\
+	  \midrule
+	 \multirow{4}{*}{Degree $=4$}   & Diameter & 5 & 7 & 9 \\
+	                                & Throughput (tps) & $7.2\times 10^4$ & $7.4\times 10^4$ & $7.4\times 10^4$ \\
+	                                & Latency (s) & 40 & 58 & 67 \\
+	                                & Forking & 0.119 & 0.117 & 0.112 \\
+	 \hline
+	 \multirow{4}{*}{Diameter $=5$} & Degree & 4 & 6 & 8 \\
+	                                & Throughput (tps) & $7.2\times 10^4$ & $7.9\times 10^4$ & $7.9\times 10^4$ \\ 
+	                                & Latency (s) &40 & 44 & 37 \\
+	                                & Forking & 0.119 & 0.119 & 0.127 \\
+        \bottomrule
+	\end{tabular}
+	\caption{Performance of Prism with scaling to larger number of nodes.}
+	\label{table:scale}
+	\end{table}    
+	
+	\heading{Performance when under attack}
+	\begin{figure}
+      \centering
+      \subcaptionbox{Censorship attack}{\input{attack-fig-censor.tex}}
+      \subcaptionbox{Balancing attack}{\input{attack-fig-balancing.tex}}
+      \caption{Performance when under attacks. Censorship attack: attacker mines empty transaction and proposer blocks. Balancing attack: attacker tries to balance votes between multiple proposer blocks on the same level.}
+  \end{figure}
+    
+\end{block}
 
-  \begin{block}{References}
 
-    \nocite{*}
-    \footnotesize{\bibliographystyle{plain}\bibliography{poster}}
 
-  \end{block}
+  %\begin{block}{References}
+
+   % \nocite{*}
+   % \footnotesize{\bibliographystyle{plain}\bibliography{poster}}
+
+  %\end{block}
 
 \end{column}
 
