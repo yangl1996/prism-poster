@@ -93,7 +93,7 @@
     
   \textbf{Confirmation Latency}. Requires $k$-deep to defend against double-spending attack. $k$ is large if we want high security (Fig.~\ref{fig:latency}).
   
-  \textbf{Throughput}. Honest blocks need to form a chain. Increasing the throughput causes the honest blocks to form a tree because they can not hear each other quickly enough. No longer safe against a 50\% adversary (Fig.~\ref{fig:throughput}, assuming every block travels 5 hops to reach the whole network).
+  \textbf{Throughput}. Honest blocks need to form a chain. Increasing the mining rate causes forking. No longer safe against a 50\% adversary (Fig.~\ref{fig:throughput}, assuming every block travels 5 hops to reach the whole network).
   
   \begin{figure}
       \centering
@@ -112,9 +112,9 @@
   
   \begin{alertblock}{The Prism protocol}
 
-  \textbf{Observation}: blocks in the longest chain protocol serve three roles: standing for election to be leaders; adding transactions to the ledger; voting for ancestor blocks.
+  \textbf{Observation}: the longest chain protocol couples throughput and latency with security.
   
-  \textbf{Solution}: factorizing the blocks according to those roles (Fig.~\ref{fig:prism-chains})
+  \textbf{Solution}: decoupling throughput, latency, and security by factorizing the blocks according to the roles they serve: standing for election to be leaders; adding transactions to the ledger; voting for ancestor blocks (Fig.~\ref{fig:prism-chains}).
   
   \begin{enumerate}
       \item \textbf{Proposer blocktree} refers to \textit{transaction blocks}. One \textit{leader} is elected from each level. The sequence of the leaders decides the final order of the ledger.
@@ -139,7 +139,7 @@
   \end{multicols}
   \end{alertblock}
   
-  \begin{block}{Achieving high performance in the real world}
+  \begin{block}{High performance implementation}
   
   \begin{figure}
       \centering
